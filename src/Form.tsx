@@ -38,15 +38,11 @@ export default class Form<FormSchema extends z.Schema = z.Schema> {
     });
   };
 
-  Field<TName extends FieldPath<z.infer<FormSchema>> = FieldPath<z.infer<FormSchema>>>(
+  Field = <TName extends FieldPath<z.infer<FormSchema>> = FieldPath<z.infer<FormSchema>>>(
     props: ControllerProps<z.infer<FormSchema>, TName>
-  ) {
-    if (!this.form) {
-      return null;
-    }
-
-    return <Controller control={this.form.control} {...props} />;
-  }
+  ) => {
+    return <Controller control={this.form?.control} {...props} />;
+  };
 
   useUpdate = (
     updater: (prev: z.infer<FormSchema>) => z.infer<FormSchema> | void,
