@@ -1,15 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { DependencyList } from 'react';
-import { useEffect } from 'react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { DependencyList } from "react";
+import { useEffect } from "react";
 import type {
   ControllerProps,
   FieldPath,
   UseFieldArrayProps,
   UseFormProps,
   UseFormReturn,
-} from 'react-hook-form';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import type { z } from 'zod';
+} from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import type { z } from "zod";
 
 export default class Form<FormSchema extends z.Schema = z.Schema> {
   private form: UseFormReturn<z.infer<FormSchema>> | undefined;
@@ -33,7 +33,7 @@ export default class Form<FormSchema extends z.Schema = z.Schema> {
   useFieldArray = (params: UseFieldArrayProps<z.infer<FormSchema>>) => {
     return useFieldArray({
       control: this.form?.control,
-      keyName: '__id',
+      keyName: "__id",
       ...params,
     });
   };
@@ -41,7 +41,11 @@ export default class Form<FormSchema extends z.Schema = z.Schema> {
   Field<TName extends FieldPath<z.infer<FormSchema>> = FieldPath<z.infer<FormSchema>>>(
     props: ControllerProps<z.infer<FormSchema>, TName>
   ) {
-    return <Controller control={this.form?.control} {...props} />;
+    if (!this.form) {
+      return null;
+    }
+
+    return <Controller control={this.form.control} {...props} />;
   }
 
   useUpdate = (
